@@ -376,6 +376,36 @@ def streamlit_app():
     df = coin_dfs[selected_coin]
 
     # --------------------------------------------------------
+    # ----------------- COMPARE ALL COINS --------------------
+    # --------------------------------------------------------
+    
+    st.subheader("🏁 Compare All Uploaded Coins")
+    comparison_df = compare_coins(coin_dfs)
+
+    if not comparison_df.empty:
+        best = comparison_df.iloc[0]
+        st.success(
+            f"🏆 **Best Overall Coin to Invest In: {best['Coin']}**\n\n"
+            f"- Highest Risk–Reward Score: **{best['RiskRewardScore']:.2f}**\n"
+            f"- Volatility: **{best['Volatility']:.4f}**\n"
+            f"- Avg Daily Return: **{best['Avg Daily Return']:.4f}**"
+        )
+
+        st.dataframe(
+            comparison_df.style.format({
+                "Avg Close": "{:.2f}",
+                "Min Close": "{:.2f}",
+                "Max Close": "{:.2f}",
+                "Avg Daily Return": "{:.4f}",
+                "Volatility": "{:.4f}",
+                "RiskRewardScore": "{:.2f}",
+            })
+        )
+
+    else:
+        st.write("Not enough data to compare coins.")
+
+    # --------------------------------------------------------
     # STATISTICS
     # --------------------------------------------------------
     st.subheader(f"📊 Basic Statistics - {selected_coin}")
@@ -432,35 +462,6 @@ def streamlit_app():
     col1.metric("Initial Investment", f"{sim_result['Initial Investment']:.2f}")
     col2.metric("Final Value", f"{sim_result['Final Value']:.2f}")
     col3.metric("Profit / Loss", f"{sim_result['Profit']:.2f} ({sim_result['Return %']:.2f}%)")
-
-    # --------------------------------------------------------
-    # COMPARE COINS
-    # --------------------------------------------------------
-    st.subheader("🏁 Compare All Uploaded Coins")
-    comparison_df = compare_coins(coin_dfs)
-
-    if not comparison_df.empty:
-        best = comparison_df.iloc[0]
-        st.success(
-            f"🏆 **Best Overall Coin to Invest In: {best['Coin']}**\n\n"
-            f"- Highest Risk–Reward Score: **{best['RiskRewardScore']:.2f}**\n"
-            f"- Volatility: **{best['Volatility']:.4f}**\n"
-            f"- Avg Daily Return: **{best['Avg Daily Return']:.4f}**"
-        )
-
-        st.dataframe(
-            comparison_df.style.format({
-                "Avg Close": "{:.2f}",
-                "Min Close": "{:.2f}",
-                "Max Close": "{:.2f}",
-                "Avg Daily Return": "{:.4f}",
-                "Volatility": "{:.4f}",
-                "RiskRewardScore": "{:.2f}",
-            })
-        )
-
-    else:
-        st.write("Not enough data to compare coins.")
 
     # --------------------------------------------------------
     # ALERT SYSTEM
