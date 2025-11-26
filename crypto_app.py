@@ -475,7 +475,6 @@ def streamlit_app():
     # PLOTTING (LAST)
     # --------------------------------------------------------
     st.subheader(f"📉 Charts - {selected_coin}")
-    st.caption("Plotting is shown last, as requested.")
 
     fig_price, fig_volume, fig_returns = plot_graphs(df, coin_name=selected_coin)
     st.pyplot(fig_price)
